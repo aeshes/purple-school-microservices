@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: account
+
+  data:
+    mongodb:
+     uri: mongodb://admin:123@localhost:27017/test?authSource=admin
+
+  rabbitmq:
+    host: localhost
+    username: guest
+    password: guest
+
+server:
+  port: 8081
+
+logging:
+  level:
+    org.aoizora.account: DEBUG
+    org.springframework.data.mongodb: DEBUG
+
+app:
+  jwt:
+    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    expiration: 3600
+    refreshExpiration: 604800000
