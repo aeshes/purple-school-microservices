@@ -2,7 +2,7 @@ package org.aoizora.account.service;
 
 import lombok.RequiredArgsConstructor;
 import org.aoizora.account.dao.domain.RefreshToken;
-import org.aoizora.account.dao.domain.Role;
+import org.aoizora.common.Role;
 import org.aoizora.account.dao.domain.User;
 import org.aoizora.account.dao.repository.UserRepository;
 import org.aoizora.account.dto.AuthRequest;

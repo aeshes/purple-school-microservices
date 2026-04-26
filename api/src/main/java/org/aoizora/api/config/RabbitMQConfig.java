@@ -15,9 +15,13 @@ public class RabbitMQConfig {
 
     public static final String REGISTER_QUEUE = "auth.register.queue";
     public static final String LOGIN_QUEUE = "auth.login.queue";
+    public static final String USER_INFO_QUEUE = "account.user-info.queue";
+    public static final String USER_COURSES_QUEUE = "account.user-courses.queue";
 
     public static final String REGISTER_ROUTING_KEY = "auth.register";
     public static final String LOGIN_ROUTING_KEY = "auth.login";
+    public static final String USER_INFO_ROUTING_KEY = "account.user-info";
+    public static final String USER_COURSES_ROUTING_KEY = "account.user-courses";
 
     @Bean
     public TopicExchange authExchange() {
@@ -32,6 +36,32 @@ public class RabbitMQConfig {
     @Bean
     public Queue loginQueue() {
         return QueueBuilder.durable(LOGIN_QUEUE).build();
+    }
+
+    @Bean
+    public Queue userInfoQueue() {
+        return QueueBuilder.durable(USER_INFO_QUEUE).build();
+    }
+
+    @Bean
+    public Queue userCoursesQueue() {
+        return QueueBuilder.durable(USER_COURSES_QUEUE).build();
+    }
+
+    @Bean
+    public Binding userInfoBinding() {
+        return BindingBuilder
+                .bind(userInfoQueue())
+                .to(authExchange())
+                .with(USER_INFO_ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding userCoursesBinding() {
+        return BindingBuilder
+                .bind(userCoursesQueue())
+                .to(authExchange())
+                .with(USER_COURSES_ROUTING_KEY);
     }
 
     @Bean

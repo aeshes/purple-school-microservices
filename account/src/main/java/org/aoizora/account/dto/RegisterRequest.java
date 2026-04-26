@@ -2,7 +2,7 @@ package org.aoizora.account.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import org.aoizora.account.dao.domain.Role;
+import org.aoizora.common.Role;
 
 @Data
 @Builder

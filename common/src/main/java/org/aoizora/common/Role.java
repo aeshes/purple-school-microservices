@@ -1,4 +1,4 @@
-package org.aoizora.account.dao.domain;
+package org.aoizora.common;
 
 public enum Role {
     TEACHER,

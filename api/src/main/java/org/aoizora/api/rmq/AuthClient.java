@@ -30,7 +30,7 @@ public class AuthClient {
     private ConnectionFactory connectionFactory;
 
     @Autowired
-    private AmqpAdmin amqpAdmin; // Используется для declare/delete
+    private AmqpAdmin amqpAdmin;
 
     private final ConcurrentHashMap<String, CompletableFuture<AuthResponseMessage>> pendingRequests = new ConcurrentHashMap<>();
 
@@ -39,32 +39,25 @@ public class AuthClient {
 
     @PostConstruct
     public void init() {
-        // 1. Генерируем уникальное имя для очереди ответов
         responseQueueName = "client.auth.response." + UUID.randomUUID().toString();
         log.info("Initializing temporary response queue: {}", responseQueueName);
 
-        // 2. Создаем временную очередь
         Queue responseQueue = QueueBuilder.nonDurable(responseQueueName)
                 .autoDelete()
-                .exclusive() // <-- Очередь будет удалена при закрытии соединения
+                .exclusive()
                 .build();
-        amqpAdmin.declareQueue(responseQueue); // Объявляем очередь на сервере
+        amqpAdmin.declareQueue(responseQueue);
         log.info("Temporary queue declared: {}", responseQueueName);
 
-        // 3. Создаем Binding для этой очереди
-        // В Spring AMQP 3.1.5 нельзя получить exchange через amqpAdmin.getExchange().
-        // Вместо этого мы создаем Binding, предполагая, что exchange уже существует.
-        // Мы используем ExchangeBuilder для создания объекта Exchange, который нужен только для создания Binding.
         Exchange authExchange = ExchangeBuilder.topicExchange(RabbitMQConfig.EXCHANGE_NAME).build();
         Binding binding = BindingBuilder
                 .bind(responseQueue)
                 .to(authExchange)
-                .with(responseQueueName) // Используем имя очереди как routing key
+                .with(responseQueueName)
                 .noargs();
         amqpAdmin.declareBinding(binding);
         log.info("Binding declared for queue: {} with routing key: {}", responseQueueName, responseQueueName);
 
-        // 4. Настраиваем Listener для получения ответов
         responseListenerContainer = new SimpleMessageListenerContainer();
         responseListenerContainer.setConnectionFactory(connectionFactory);
         responseListenerContainer.setQueueNames(responseQueueName);
@@ -112,7 +105,6 @@ public class AuthClient {
 
         log.info("Sent register request. correlationId: {}, replyTo: {}", correlationId, responseQueueName);
 
-        // Таймаут на случай отсутствия ответа
         return future.orTimeout(30, TimeUnit.SECONDS)
                 .exceptionally(throwable -> {
                     pendingRequests.remove(correlationId);

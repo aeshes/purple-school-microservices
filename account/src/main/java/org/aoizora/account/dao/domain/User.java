@@ -29,7 +29,7 @@ public class User implements UserDetails {
 
     private String password;
 
-    private Role role;
+    private org.aoizora.common.Role role;
 
     private List<UserCourse> courses = new ArrayList<>();
 
