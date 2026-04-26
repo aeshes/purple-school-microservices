@@ -46,7 +46,11 @@ public class UserQueries {
             response.setCorrelationId(request.getCorrelationId());
             response.setUser(dto);
 
-            rabbitTemplate.convertAndSend(EXCHANGE_NAME, replyTo, response);
+            rabbitTemplate.convertAndSend(EXCHANGE_NAME, RabbitMQConfig.USER_INFO_REPLY_ROUTING_KEY, response, message -> {
+                message.getMessageProperties().setCorrelationId(request.getCorrelationId());
+
+                return message;
+            });
 
             log.info("Отправлен ответ в очередь {}.", replyTo);
         });

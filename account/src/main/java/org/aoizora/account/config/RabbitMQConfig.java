@@ -17,10 +17,13 @@ public class RabbitMQConfig {
     public static final String LOGIN_QUEUE = "auth.login.queue";
     public static final String USER_INFO_QUEUE = "account.user-info.queue";
     public static final String USER_COURSES_QUEUE = "account.user-courses.queue";
+    public static final String USER_INFO_REPLY_QUEUE = "account.user-info.reply";
+    public static final String USER_COURSES_REPLY_QUEUE = "account.user-courses.reply";
 
     public static final String REGISTER_ROUTING_KEY = "auth.register";
     public static final String LOGIN_ROUTING_KEY = "auth.login";
     public static final String USER_INFO_ROUTING_KEY = "account.user-info";
+    public static final String USER_INFO_REPLY_ROUTING_KEY = "account.user-info.reply-key";
     public static final String USER_COURSES_ROUTING_KEY = "account.user-courses";
 
     @Bean
